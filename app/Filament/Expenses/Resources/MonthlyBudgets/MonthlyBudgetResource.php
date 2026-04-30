@@ -20,7 +20,7 @@ class MonthlyBudgetResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'MonthlyBudget';
+    protected static ?string $recordTitleAttribute = 'budget_amount';
 
     protected static ?string $modelLabel = 'Salário';
 

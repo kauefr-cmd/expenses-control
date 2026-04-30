@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFixedExpenseTemplate extends CreateRecord
 {
     protected static string $resource = FixedExpenseTemplateResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

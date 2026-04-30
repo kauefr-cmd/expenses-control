@@ -6,6 +6,7 @@ use App\Enums\DueMonthly;
 use App\Enums\ExpenseStatus;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
@@ -43,12 +44,14 @@ class FixedExpensesTable
 
                 TextColumn::make('month')
                     ->label('Mês')
+                    ->getStateUsing(fn($record) => $record->month->getLabel())
                     ->sortable(),
 
                 TextColumn::make('status')
                     ->label('Status')
+                    ->getStateUsing(fn($record) => $record->status->getLabel())
                     ->badge()
-                    ->color(fn($state) => $state->getLabel()),
+                    ->color(fn($record) => $record->status->getColor()),
             ])
             ->filters([
                 SelectFilter::make('month')
@@ -73,6 +76,7 @@ class FixedExpensesTable
                     ]))
                     ->button(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

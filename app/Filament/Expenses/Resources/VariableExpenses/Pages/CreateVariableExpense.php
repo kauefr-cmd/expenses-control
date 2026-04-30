@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateVariableExpense extends CreateRecord
 {
     protected static string $resource = VariableExpenseResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

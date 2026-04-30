@@ -3,6 +3,7 @@
 namespace App\Filament\Expenses\Resources\MonthlyBudgets\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -15,28 +16,25 @@ class MonthlyBudgetsTable
         return $table
             ->columns([
                 TextColumn::make('month')
-                    ->numeric()
+                    ->label('Mês')
+                    ->formatStateUsing(fn ($state) => $state->getLabel())
                     ->sortable(),
+
                 TextColumn::make('year')
-                    ->numeric()
+                    ->label('Ano')
                     ->sortable(),
+
                 TextColumn::make('budget_amount')
-                    ->numeric()
+                    ->label('Valor')
+                    ->money('BRL')
                     ->sortable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

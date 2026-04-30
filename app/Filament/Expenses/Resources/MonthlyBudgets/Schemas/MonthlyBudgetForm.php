@@ -2,6 +2,8 @@
 
 namespace App\Filament\Expenses\Resources\MonthlyBudgets\Schemas;
 
+use App\Enums\DueMonthly;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -11,15 +13,23 @@ class MonthlyBudgetForm
     {
         return $schema
             ->components([
-                TextInput::make('month')
+                Select::make('month')
+                    ->label('Mês')
                     ->required()
-                    ->numeric(),
+                    ->options(DueMonthly::class)
+                    ->default(DueMonthly::from(now()->format('F'))->value),
+
                 TextInput::make('year')
+                    ->label('Ano')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->default(now()->year),
+
                 TextInput::make('budget_amount')
+                    ->label('Valor')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->prefix('R$'),
             ]);
     }
 }

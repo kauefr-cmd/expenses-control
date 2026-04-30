@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateMonthlyBudget extends CreateRecord
 {
     protected static string $resource = MonthlyBudgetResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

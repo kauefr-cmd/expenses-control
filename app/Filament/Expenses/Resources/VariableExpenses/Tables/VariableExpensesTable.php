@@ -6,6 +6,7 @@ use App\Enums\DueMonthly;
 use App\Enums\ExpenseStatus;
 use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -38,6 +39,7 @@ class VariableExpensesTable
 
                 TextColumn::make('month')
                     ->label('Mês')
+                    ->getStateUsing(fn($record) => $record->month->getLabel())
                     ->sortable(),
 
                 TextColumn::make('status')
@@ -79,6 +81,7 @@ class VariableExpensesTable
                     ]))
                     ->button(),
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

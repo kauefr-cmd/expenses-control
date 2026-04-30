@@ -34,7 +34,9 @@ class Dashboard extends BaseDashboard
                     ->schema([
                         Select::make('month')
                             ->label('Mês')
-                            ->options(DueMonthly::class)
+                            ->options(collect(DueMonthly::cases())
+                                ->mapWithKeys(fn($case) => [$case->value => $case->getLabel()])
+                            )
                             ->default(DueMonthly::from(now()->format('F'))->value),
 
                         Select::make('year')
