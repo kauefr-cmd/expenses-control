@@ -129,7 +129,3 @@ app/
     └── ExpensesPanelProvider.php
 database/migrations/             # Schema definitions
 ```
-
-## License
-
-Released under the [MIT License](https://opensource.org/licenses/MIT).
