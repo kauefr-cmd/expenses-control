@@ -44,6 +44,7 @@ class VariableExpenseForm
                 Select::make('month')
                     ->label('Mês')
                     ->options(DueMonthly::class)
+                    ->default(DueMonthly::from(now()->format('F')))
                     ->required(),
 
                 TextInput::make('year')

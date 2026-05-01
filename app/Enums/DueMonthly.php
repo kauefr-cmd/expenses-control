@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum DueMonthly: string
+use Filament\Support\Contracts\HasLabel;
+
+enum DueMonthly: string implements HasLabel
 {
     case january = 'January';
     case february = 'February';
