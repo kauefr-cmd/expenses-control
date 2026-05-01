@@ -1,58 +1,135 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Finance Control
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A personal finance management application built with **Laravel 13** and **Filament 5**. It provides an admin-style panel to track monthly income, fixed and variable expenses, recurring bills, and budgets — all visualized through interactive charts and stats.
 
-## About Laravel
+> **Live demo:** try the app at <http://finance-control.ddns.net/> using the credentials below:
+>
+> ```
+> login:    user@email.com
+> password: usertest
+> ```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Finance Control helps you keep an organized, month-by-month view of your personal finances. You set a monthly budget (e.g. your salary), register your fixed and variable expenses by category, and the dashboard shows you the totals, the remaining balance, and how spending evolves over time.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+The application is structured around a dedicated **Expenses** Filament panel, accessible at `/expenses` after login.
 
-## Learning Laravel
+## Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Monthly Budget** — register the available budget (income/salary) for each month/year combination.
+- **Categories** — organize expenses by category with a custom name, color, and icon.
+- **Fixed Expense Templates** — define the recurring bills you have every month (rent, internet, subscriptions, etc.).
+- **Monthly expense generation** — with one click on the dashboard, generate the fixed expenses for a given month/year from the active templates (uses `firstOrCreate` to avoid duplicates).
+- **Fixed Expenses** — month-specific fixed bills, each with a status (`pending`, `paid`, `overdue`) and a due day.
+- **Variable Expenses** — one-off or installment-based purchases (`installments`, `current_installment`, `installment_group_id`).
+- **Dashboard with filters** — filter all widgets by month and year:
+    - **Stats Overview**: salary, fixed total, variable total, total spent, and remaining balance.
+    - **Expenses by Category**: pie chart breaking down spending per category (combining fixed and variable).
+    - **Monthly Evolution**: 12-month line chart comparing fixed vs. variable spending across the selected year.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Tech Stack
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- **PHP 8.3+**
+- **Laravel 13**
+- **Filament 5.6** (admin panel, forms, tables, widgets, charts)
+- **SQLite** (default; any Laravel-supported DB works)
+- **Vite + Tailwind CSS 4** for assets
 
-## Agentic Development
+## Domain Model
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+| Model                  | Purpose                                                              |
+|------------------------|----------------------------------------------------------------------|
+| `MonthlyBudget`        | Available budget for a given `month` + `year`                        |
+| `Category`             | Expense categorization (`name`, `color`, `icon`)                     |
+| `FixedExpenseTemplate` | Blueprint for recurring fixed expenses                               |
+| `FixedExpense`         | Materialized fixed expense for a specific month, linked to a template|
+| `VariableExpense`      | One-off or installment-based purchase                                |
+
+Two enums drive the workflow:
+
+- `DueMonthly` — the twelve months (`January`..`December`) with Portuguese labels.
+- `ExpenseStatus` — `pending`, `paid`, `overdue` (with color mapping for the UI).
+
+## Getting Started
+
+### Requirements
+
+- PHP **8.3+** with the standard Laravel extensions (`pdo`, `pdo_sqlite`, `mbstring`, `tokenizer`, `xml`, `ctype`, `fileinfo`, `dom`)
+- Composer
+- Node.js 20+
+
+### Installation
 
 ```bash
-composer require laravel/boost --dev
+git clone <your-repo-url> finance-control
+cd finance-control
 
-php artisan boost:install
+composer install
+cp .env.example .env
+php artisan key:generate
+
+# Create the SQLite database file
+touch database/database.sqlite
+
+php artisan migrate
+
+npm install
+npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Or use the bundled composer script which runs the full setup:
 
-## Contributing
+```bash
+composer setup
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Running locally
 
-## Code of Conduct
+The project ships with an all-in-one dev script that runs the PHP server, the queue worker, log tailing (`pail`), and Vite concurrently:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+composer dev
+```
 
-## Security Vulnerabilities
+Then open:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- App root: <http://localhost:8000>
+- **Expenses panel**: <http://localhost:8000/expenses>
+
+You will need to register/login on the Filament panel before you can use it.
+
+### Tests
+
+```bash
+composer test
+```
+
+## Typical Workflow
+
+1. **Create your categories** (Food, Housing, Transport, etc.).
+2. **Set a Monthly Budget** for the current month.
+3. **Register Fixed Expense Templates** for your recurring bills.
+4. From the **Dashboard**, click **"Gerar despesas do mês"** to materialize the fixed expenses for the chosen month/year.
+5. **Add Variable Expenses** as they happen (with installment support).
+6. Update each expense status to `paid` when settled.
+7. Check the dashboard widgets for an at-a-glance view of your finances.
+
+## Project Structure
+
+```
+app/
+├── Enums/                       # DueMonthly, ExpenseStatus
+├── Filament/Expenses/
+│   ├── Pages/Dashboard.php      # Filtered dashboard + month-generation action
+│   ├── Resources/               # CRUD for each model
+│   └── Widgets/                 # StatsOverview, ExpensesByCategory, MonthlyEvolution
+├── Models/                      # Eloquent models
+└── Providers/Filament/
+    └── ExpensesPanelProvider.php
+database/migrations/             # Schema definitions
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Released under the [MIT License](https://opensource.org/licenses/MIT).
