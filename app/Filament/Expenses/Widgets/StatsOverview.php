@@ -20,7 +20,7 @@ class StatsOverview extends StatsOverviewWidget
 
         $salary = MonthlyBudget::where('month', $month)
             ->where('year', $year)
-            ->value('budget_amount') ?? 0;
+            ->sum('budget_amount');
 
         $fixed = FixedExpense::where('month', $month)
             ->where('year', $year)

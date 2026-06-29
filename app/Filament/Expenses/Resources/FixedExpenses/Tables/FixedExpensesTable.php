@@ -56,7 +56,8 @@ class FixedExpensesTable
             ->filters([
                 SelectFilter::make('month')
                     ->label('Mês')
-                    ->options(DueMonthly::class),
+                    ->options(DueMonthly::class)
+                    ->default(DueMonthly::from(now()->format('F'))->value),
             ])
             ->recordActions([
                 Action::make('toggle_status')
