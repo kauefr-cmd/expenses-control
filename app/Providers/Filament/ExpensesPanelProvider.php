@@ -4,6 +4,8 @@ namespace App\Providers\Filament;
 
 use App\Filament\Expenses\Widgets\ExpensesByCategory;
 use App\Filament\Expenses\Widgets\MonthlyEvolution;
+use App\Filament\Expenses\Widgets\PaidBills;
+use App\Filament\Expenses\Widgets\PendingBills;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -39,6 +41,8 @@ class ExpensesPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Expenses/Widgets'), for: 'App\Filament\Expenses\Widgets')
             ->widgets([
                 StatsOverview::class,
+                PaidBills::class,
+                PendingBills::class,
                 ExpensesByCategory::class,
                 MonthlyEvolution::class,
 
