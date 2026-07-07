@@ -57,6 +57,9 @@ composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 # echo "· migrate --force"; php artisan migrate --force
 # echo "· npm build";      npm ci && npm run build
 
+echo "· limpa cache de componentes do Filament (evita recurso/widget sumido)"
+php artisan filament:optimize-clear
+
 echo "· caches"
 php artisan config:cache
 php artisan route:cache
