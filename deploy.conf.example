@@ -1,0 +1,7 @@
+# Copie para deploy.conf e preencha. deploy.conf NÃO é versionado (.gitignore).
+DEPLOY_HOST="203.0.113.10"                 # IP ou hostname do VPS
+DEPLOY_USER="deploy"                       # usuário SSH
+DEPLOY_PORT="22"                           # porta SSH (opcional; padrão 22)
+DEPLOY_PATH="/var/www/expenses-control"    # caminho do projeto no servidor
+DEPLOY_BRANCH="main"                       # branch a publicar (opcional; padrão main)
+DEPLOY_KEY="$HOME/.ssh/id_ed25519"         # chave SSH privada (opcional; use se entra com 'ssh -i')
