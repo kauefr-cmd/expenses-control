@@ -61,7 +61,7 @@ echo "· caches"
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan storage:link 2>/dev/null || true
+[ -L public/storage ] || php artisan storage:link
 
 echo "· restart fila"
 php artisan queue:restart
