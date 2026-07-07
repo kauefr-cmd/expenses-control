@@ -2,6 +2,7 @@
 namespace App\Filament\Expenses\Widgets;
 
 use App\Enums\DueMonthly;
+use App\Enums\ExpenseStatus;
 use App\Models\FixedExpense;
 use App\Models\MonthlyBudget;
 use App\Models\VariableExpense;
@@ -30,6 +31,16 @@ class StatsOverview extends StatsOverviewWidget
             ->where('year', $year)
             ->sum('amount');
 
+        $pending = FixedExpense::where('month', $month)->where('year', $year)
+                    ->where('status', ExpenseStatus::Pending->value)->sum('amount')
+              + VariableExpense::where('month', $month)->where('year', $year)
+                    ->where('status', ExpenseStatus::Pending->value)->sum('amount');
+        
+        $paid = FixedExpense::where('month', $month)->where('year', $year)
+                    ->where('status', ExpenseStatus::Paid->value)->sum('amount')
+              + VariableExpense::where('month', $month)->where('year', $year)
+                    ->where('status', ExpenseStatus::Paid->value)->sum('amount');
+        
         $total   = $fixed + $variable;
         $balance = $salary - $total;
 
@@ -54,6 +65,16 @@ class StatsOverview extends StatsOverviewWidget
                 ->description('Total do mês')
                 ->descriptionIcon('heroicon-o-arrow-trending-down')
                 ->color('danger'),
+
+            Stat::make('Contas Pendentes', 'R$ ' . number_format($pending, 2, ',', '.'))
+                ->description('Contas pendentes do mês')
+                ->descriptionIcon('heroicon-o-clock')
+                ->color('warning'),
+
+            Stat::make('Contas Pagas', 'R$ ' . number_format($paid, 2, ',', '.'))
+                ->description('Contas já pagas do mês')
+                ->descriptionIcon('heroicon-o-check-circle')
+                ->color('success'),
 
             Stat::make('Saldo', 'R$ ' . number_format($balance, 2, ',', '.'))
                 ->description($balance >= 0 ? 'Saldo positivo' : 'Saldo negativo')

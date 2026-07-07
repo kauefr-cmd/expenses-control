@@ -41,8 +41,6 @@ class ExpensesPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Expenses/Widgets'), for: 'App\Filament\Expenses\Widgets')
             ->widgets([
                 StatsOverview::class,
-                PaidBills::class,
-                PendingBills::class,
                 ExpensesByCategory::class,
                 MonthlyEvolution::class,
 
